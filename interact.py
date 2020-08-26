@@ -9,7 +9,7 @@ if __name__ == '__main__':
     parser.add_argument('--max_length', type=int, default=128,
                         help='maximum length for code generation')
     parser.add_argument('--temperature', type=float, default=0.7,
-                        help='temperature for sampling-based code geneeration')
+                        help='temperature for sampling-based code generation')
     parser.add_argument(
         "--use_cuda", action="store_true", help="inference with gpu?"
     )
@@ -27,8 +27,8 @@ if __name__ == '__main__':
     # now the fine-tunned model supports two programming languages, namely, python and java
     def lang_select():
         lang = ""
-        while lang not in ["python", "java"]:
-            print('Enter the programming language you prefer (python or java)')
+        while lang not in ["js"]:
+            print('Enter the programming language you prefer (javascript)')
             lang = input(">>> ").lower()
         return lang
 
@@ -46,9 +46,8 @@ if __name__ == '__main__':
             print(f"You are using {lang} now. Enter the context code")
             context = input(">>> ")
 
-        input_ids = tokenizer.encode("<python> " + context,
-                                     return_tensors='pt') if lang == "python" else tokenizer.encode(
-            "<java> " + context, return_tensors='pt')
+        input_ids = tokenizer.encode("<js> " + context,
+                                     return_tensors='pt')
         outputs = model.generate(input_ids=input_ids.to("cuda") if args.use_cuda else input_ids,
                                  max_length=args.max_length,
                                  temperature=args.temperature,
